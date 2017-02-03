@@ -183,6 +183,19 @@ create_resources('logstash::configfile', $logstash_configs)
   }
 }
 ```
+... or specify your config directly in hiera as an array:
+``` yaml
+---
+logstash_configs:
+  config-name:
+    content:
+      - input {
+      -   heartbeat {}
+      - }
+      - output {
+      -   null {}
+      - }
+```
 
 ### Patterns
 Many plugins (notably [Grok](http://logstash.net/docs/latest/filters/grok)) use *patterns*. While many are included in Logstash already, additional site-specific patterns can be managed as well.

@@ -20,6 +20,31 @@ describe 'define logstash::configfile' do
     end
   end
 
+  context 'with explicit content from an array' do
+
+    manifest = <<-END
+    $data = {
+      'heartbeat-input-array' => {
+        'content' => [
+          "{",
+          "  heartbeat {}",
+          "}"
+        ] 
+      }
+    }
+    create_resources('logstash::configfile', $data)
+    END
+
+    before(:context) do
+      apply_manifest(manifest, catch_failures: true)
+    end
+
+    it 'creates a file with the given content' do
+      result = shell('cat /etc/logstash/conf.d/heartbeat-input-array').stdout
+      expect(result).to include('heartbeat')
+    end
+  end
+
   context 'with a template' do
     manifest = <<-END
     logstash::configfile { 'from-template':
